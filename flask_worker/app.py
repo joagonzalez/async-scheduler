@@ -1,6 +1,8 @@
 import sys
 import time
 import json
+import requests
+import pymsteams
 from flask import Flask
 from celery import Celery
 from flask_celery import make_celery
@@ -40,12 +42,37 @@ def status(taskid):
         result['status'] = str(BUFFER[taskid].state)
         if result['status'] == 'SUCCESS':
             result['result'] = str(BUFFER[taskid].get(propagate=False))
+            notification = '<b>Task ID: </b>' + taskid + ': ' + ' - <b>Status: </b>' + result['status'] + ' - <b>Result: </b>' + result['result']
+            result['notification'] = str(send_teams_message(notification))
         else:
             result['result'] = 'Not ready'
     else:
         result['status'] = 'Task not in buffer'
         result['result'] = 'Not ready'  
     return json.dumps(result) 
+
+
+def send_message(taskid, taskstatus, taskresult):
+    result = False
+    message = {}
+    message['taskid'] = taskid
+    message['taskstatus'] = taskstatus
+    message['taskresult'] = taskresult
+
+    json_payload = {'text' : message }
+
+    try:
+        response = requests.post(WEBHOOK_URL, data=json_payload(send)) 
+        result = response
+    except:
+        result = 'service is not responding...'
+    return result
+
+def send_teams_message(message):
+    myTeamsMessage = pymsteams.connectorcard(WEBHOOK_URL)
+    myTeamsMessage.text(message)
+    result = myTeamsMessage.send()
+    return result
 
 # defino celery task en archivo app funcion add
 @celery.task(name='app.reverse')
