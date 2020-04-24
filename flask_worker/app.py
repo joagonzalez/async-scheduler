@@ -24,7 +24,7 @@ def process(name):
 
     celery_task = reverse.delay(name)
 
-    BUFFER[str(celery_task)] = reverse.delay(name)
+    BUFFER[str(celery_task)] = celery_task
     
     result['name'] = name
     result['status'] = 'will be ready in 10 sec'
@@ -51,6 +51,11 @@ def status(taskid):
         result['result'] = 'Not ready'  
     return json.dumps(result) 
 
+@app.route('/buffer')
+def get_buffer():
+    result = {}
+    result['result'] = str(BUFFER)
+    return json.dumps(result)  
 
 def send_message(taskid, taskstatus, taskresult):
     result = False
