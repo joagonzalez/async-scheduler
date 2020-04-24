@@ -62,4 +62,6 @@ docker run -d --hostname rabbitmq-poc --name rabbitmq-poc -p 5672:5672 -p 8080:1
 Flower allows monitor Celery worker and also expose an API to manage the cluster
 ```
 docker run -d --hostname flower-poc --name flower-poc -p 5555:5555 -p 8888:8888 mher/flower "flower --broker=pyamqp://guest@localhost// --port=8888" 
+
+celery -A app.celery flower --port=5555 --address=0.0.0.0 --basic_auth=admin:admin --broker=pyamqp://guest@localhost//
 ```
