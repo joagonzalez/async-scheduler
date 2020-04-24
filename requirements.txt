@@ -67,7 +67,7 @@ mccabe==0.6.1
 more-itertools==8.2.0
 msal==1.1.0
 netifaces==0.10.4
-nltk==3.4
+nltk==3.4.5
 numpy==1.15.4
 oauth==1.0.1
 oauthlib==2.1.0
