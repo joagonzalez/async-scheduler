@@ -53,7 +53,13 @@ jgonzalez@godel:~$ curl http://127.0.0.1:5000/status/5a636196-ba86-4e58-a770-9ae
 ```
 
 #### Configure rabbitMQ
-
+Port 8080 will expose RabbitMQ monitoring GUI
 ```
-docker run -d -p 5672:5672 rabbitmq
+docker run -d --hostname rabbitmq-poc --name rabbitmq-poc -p 5672:5672 -p 8080:15672 rabbitmq:3-management
+```
+
+#### Configure flower
+Flower allows monitor Celery worker and also expose an API to manage the cluster
+```
+docker run -d --hostname flower-poc --name flower-poc -p 5555:5555 -p 8888:8888 mher/flower "flower --broker=pyamqp://guest@localhost// --port=8888" 
 ```
