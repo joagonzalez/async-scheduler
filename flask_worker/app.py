@@ -86,4 +86,4 @@ def reverse(word):
     return word[::-1]
 
 if __name__ == '__main__':
-    app.run(debug=DEBUG)
+    app.run(host=HOSTNAME, port=PORT, debug=DEBUG)
