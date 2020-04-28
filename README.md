@@ -1,7 +1,8 @@
 ### Celery using rabbitMQ as broker
 
-Using producer-consumer approach allows to decouple task scheduling from workers that actually execute the task. This also allows to run code in workers regardless of their OS and having load balacing for task execution.
+Using producer-consumer approach allows to decouple task scheduling from workers that actually execute tasks. This also allows to run code in workers regardless of their OS and having load balacing for task execution.
 
+Late acknowledge tasks are recommended when the code that workers must run is idempotent.
 
 ![Figura 1](https://github.com/joagonzalez/celery_poc/blob/master/doc/tasks_flow.png)
 
