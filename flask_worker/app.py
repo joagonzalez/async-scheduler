@@ -12,6 +12,8 @@ from settings import *
 app = Flask(__name__)
 app.config['CELERY_BROKER_URL'] = CELERY_BROKER_URL
 app.config['CELERY_BACKEND'] = CELERY_BACKEND
+app.config['ACCEPT_CONTENT'] = ACCEPT_CONTENT
+app.config['TASK_SERIALIZER'] = TASK_SERIALIZER
 
 #configure celery
 celery = make_celery(app)
@@ -34,7 +36,7 @@ def process(name):
     result['taskid'] = str(celery_task)
     result['task_state'] = str(celery_task.state)
     result['scheduled'] = True
-    result['buffer_status'] = str(BUFFER)
+    # result['buffer_status'] = str(BUFFER)
 
     return json.dumps(result)
 
@@ -68,7 +70,7 @@ def reverse(word):
 
 @celery.task(name='app.print_result') # dispatcher for reverse task
 def print_result(result):
-    send_teams_message('task dispatcher')
+    # send_teams_message('task dispatcher')
     return result[::-1]
 
 # functions
