@@ -22,7 +22,9 @@ BUFFER = {}
 def process(name):
     result = {}
 
-    celery_task = reverse.delay(name)
+    # celery_task = reverse.delay(name)
+    # dipatch a second task (print_result) linked by success result of a parent task (reverse)
+    celery_task = reverse.s(name).apply_async(link=print_result.s())
 
     BUFFER[str(celery_task)] = celery_task
     
@@ -84,6 +86,12 @@ def send_teams_message(message):
 def reverse(word):
     time.sleep(10)
     return word[::-1]
+
+@celery.task(name='app.print_result')
+def print_result(result):
+    send_teams_message('task dispatcher')
+    return result[::-1]
+
 
 if __name__ == '__main__':
     app.run(host=HOSTNAME, port=PORT, debug=DEBUG)
