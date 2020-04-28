@@ -18,6 +18,7 @@ celery = make_celery(app)
 
 BUFFER = {}
 
+# api endpoints
 @app.route('/process/<name>')
 def process(name):
     result = {}
@@ -59,6 +60,18 @@ def get_buffer():
     result['result'] = str(BUFFER)
     return json.dumps(result)  
 
+# celery tasks
+@celery.task(name='app.reverse')
+def reverse(word):
+    time.sleep(10)
+    return word[::-1]
+
+@celery.task(name='app.print_result') # dispatcher for reverse task
+def print_result(result):
+    send_teams_message('task dispatcher')
+    return result[::-1]
+
+# functions
 def send_message(taskid, taskstatus, taskresult):
     result = False
     message = {}
@@ -81,17 +94,14 @@ def send_teams_message(message):
     result = myTeamsMessage.send()
     return result
 
-# defino celery task en archivo app funcion add
-@celery.task(name='app.reverse')
-def reverse(word):
-    time.sleep(10)
-    return word[::-1]
+# bootstrap flask app
+def register_service():
+    print('Register service....')
 
-@celery.task(name='app.print_result')
-def print_result(result):
-    send_teams_message('task dispatcher')
-    return result[::-1]
+def create_app(app):
+    register_service()
+    app.run(host=HOSTNAME, port=PORT, debug=DEBUG)
 
 
 if __name__ == '__main__':
-    app.run(host=HOSTNAME, port=PORT, debug=DEBUG)
+    create_app(app)
