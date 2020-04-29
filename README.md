@@ -24,7 +24,7 @@ celery -A app.celery worker --loglevel=info -n worker1
 celery -A app.celery worker --loglevel=info -n worker2
 ```
 
-**Celery + windows workers
+**Celery + windows workers**
 
 Install requirements
 
