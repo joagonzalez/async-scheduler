@@ -62,6 +62,23 @@ def get_buffer():
     result['result'] = str(BUFFER)
     return json.dumps(result)  
 
+@app.route('/alias')
+def alias():
+    result = {}
+
+    celery_task = get_alias.delay()
+    # dipatch a second task (print_result) linked by success result of a parent task (reverse)
+    # celery_task = reverse.s().apply_async(link=print_result.s())
+
+    BUFFER[str(celery_task)] = celery_task
+    
+    result['status'] = 'will be ready when powershell says'
+    result['taskid'] = str(celery_task)
+    result['task_state'] = str(celery_task.state)
+    result['scheduled'] = True
+
+    return json.dumps(result)
+
 # celery tasks
 @celery.task(name='app.reverse')
 def reverse(word):
@@ -72,6 +89,25 @@ def reverse(word):
 def print_result(result):
     # send_teams_message('task dispatcher')
     return result[::-1]
+
+@celery.task(bind=True, name='app.powershell') 
+def get_alias(self):
+    SCRIPT = 'alias.ps1'
+    PATH = 'scripts/'
+    CMD = 'powershell ../' + PATH + SCRIPT
+    MESSAGE = []
+    result = os.system(CMD + ' >> output_' + str(self.request.id) + '.txt')
+
+    f = open('output_' + str(self.request.id) + '.txt')
+    for line in f:
+        MESSAGE.append('\n' + line)
+
+    f.close()
+
+    os.system('powershell rm output_' + str(self.request.id) + '.txt')
+
+    send_teams_message('task id:' + str(self.request.id) + '\ndump: ' + str(MESSAGE[:80]))
+    return str(result)
 
 # functions
 def send_message(taskid, taskstatus, taskresult):
