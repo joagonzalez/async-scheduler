@@ -24,6 +24,29 @@ celery -A app.celery worker --loglevel=info -n worker1
 celery -A app.celery worker --loglevel=info -n worker2
 ```
 
+**Celery + windows workers
+
+Install requirements
+
+```
+pip install eventlet
+pip install gevent
+pip install pymsteams
+pip install celery==4.2
+```
+
+Considerations regarding celery version and windows compatibility
+
+`https://stackoverflow.com/questions/37255548/how-to-run-celery-on-windows`
+
+```
+celery -A <module> worker -l info -P gevent
+
+window 10 + celery 4.2 + python 3.6
+
+celery -A windows_worker.celery worker --loglevel=Info -n worker3-win -P gevent
+celery -A windows_worker.celery worker --loglevel=Info -n worker2-win -P gevent
+```
 
 `/process/<word>`
 ```
@@ -64,6 +87,11 @@ jgonzalez@godel:~$ curl http://127.0.0.1:5000/buffer | python -mjson.tool
 {
     "result": "{'b9810946-ee45-4bd6-bae2-7eedea36d54e': <AsyncResult: b9810946-ee45-4bd6-bae2-7eedea36d54e>, '303a2d28-66ac-471f-bb61-6653d3950b58': <AsyncResult: 303a2d28-66ac-471f-bb61-6653d3950b58>, '654fcfa0-cc9a-4110-bb3b-13e5d6aae882': <AsyncResult: 654fcfa0-cc9a-4110-bb3b-13e5d6aae882>, 'faf161ae-b9b8-48fe-97c6-2251419ab896': <AsyncResult: faf161ae-b9b8-48fe-97c6-2251419ab896>, 'a24f9ed7-966f-46f8-943d-630fe2c40f3f': <AsyncResult: a24f9ed7-966f-46f8-943d-630fe2c40f3f>, 'bd9832de-c3ec-4738-b0c5-6d514249bf4a': <AsyncResult: bd9832de-c3ec-4738-b0c5-6d514249bf4a>, '4733d56e-1c91-4f1b-a72a-1901ce6e8e15': <AsyncResult: 4733d56e-1c91-4f1b-a72a-1901ce6e8e15>}"
 }
+```
+
+`/powershell`
+```
+jgonzalez@godel:~$ curl http://127.0.0.1:5000/powershell | python -mjson.tool
 ```
 
 #### Configure rabbitMQ
