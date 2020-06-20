@@ -32,7 +32,7 @@ Install requirements
 pip install eventlet
 pip install gevent
 pip install pymsteams
-pip install celery==4.2
+pip install celery==4.4.5
 ```
 
 Considerations regarding celery version and windows compatibility
