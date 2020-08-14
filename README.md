@@ -22,6 +22,7 @@ cd flask_worker
 python3 app.py
 celery -A app.celery worker --loglevel=info -n worker1
 celery -A app.celery worker --loglevel=info -n worker2
+celery -A services.workerService.linux worker --loglevel=info -n worker1 --queue linux
 ```
 
 **Celery + windows workers**

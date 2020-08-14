@@ -3,13 +3,15 @@ CONFIG = {
                 'CELERY_BROKER_URL': 'pyamqp://guest@localhost//',
                 'CELERY_BACKEND': 'rpc://',
                 'ACCEPT_CONTENT':  ['pickle', 'json', 'x-python-serialize', 'application/x-python-serialize'],
-                'TASK_SERIALIZER': 'pickle'
+                'TASK_SERIALIZER': 'pickle',
+                'CELERY_CREATE_MISSING_QUEUES': True
+
             },
             'FLASK' : {
                 'DEBUG': True,
                 'HOSTNAME': 'newcos-sandbox-04.smq.net',
                 'PORT': 5000,
-                'LOGGER': 'app_production'
+                'LOGGER': 'app_debug'
             },
             'RESTX': {
                 'VERSION': '1.0',

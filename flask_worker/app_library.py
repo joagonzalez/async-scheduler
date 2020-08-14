@@ -32,7 +32,3 @@ def register_service(logger):
     # logger.warning('Register service....')
     # logger.error('Register service....')
 
-# bootstrap flask app
-def create_app(app, logger):  
-    register_service(logger)  
-    app.run(host=CONFIG['FLASK']['HOSTNAME'], port=CONFIG['FLASK']['PORT'], debug=CONFIG['FLASK']['DEBUG'])
