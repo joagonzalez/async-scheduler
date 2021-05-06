@@ -1,5 +1,5 @@
 Flask==1.1.2
-Flask-Cors==3.0.8
+Flask-Cors==3.0.9
 Flask-OAuthlib==0.9.5
 flask-restplus==0.9.2
 Flask-SQLAlchemy==2.1
